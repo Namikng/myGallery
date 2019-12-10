@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import org.jetbrains.anko.alert
@@ -53,5 +54,16 @@ class MainActivity : AppCompatActivity() {
             null, // 조건
             null, // 조건
             MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC") // 찍은 날짜 내림차순
+
+        //
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                // 사진 경로 Uri 가져오기
+                val uri = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
+                Log.d("MainActivity", uri)
+            }
+            // 메모리 누수 방지
+            cursor.close()
+        }
     }
 }
