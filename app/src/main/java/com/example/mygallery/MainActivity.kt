@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.yesButton
+import kotlin.concurrent.timer
 
 class MainActivity : AppCompatActivity() {
 
@@ -74,5 +75,16 @@ class MainActivity : AppCompatActivity() {
         val adapter = MyPagerAdapter(supportFragmentManager)
         adapter.updateFragments(fragments)
         viewPager.adapter = adapter
+
+        // 3초마다 자동 슬라이드
+        timer(period = 3000) {
+            runOnUiThread {
+                if (viewPager.currentItem < adapter.count - 1) {
+                    viewPager.currentItem = viewPager.currentItem + 1
+                } else {
+                    viewPager.currentItem = 0
+                }
+            }
+        }
     }
 }
